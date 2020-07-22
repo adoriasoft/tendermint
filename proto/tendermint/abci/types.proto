@@ -10,6 +10,7 @@ import "tendermint/types/types.proto";
 import "tendermint/crypto/keys.proto";
 import "tendermint/types/params.proto";
 import "google/protobuf/timestamp.proto";
+import "tendermint/google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 
 // This file is copied from http://github.com/tendermint/abci
@@ -382,13 +383,42 @@ service ABCIApplication {
   rpc Flush(RequestFlush) returns (ResponseFlush);
   rpc Info(RequestInfo) returns (ResponseInfo);
   rpc SetOption(RequestSetOption) returns (ResponseSetOption);
-  rpc DeliverTx(RequestDeliverTx) returns (ResponseDeliverTx);
-  rpc CheckTx(RequestCheckTx) returns (ResponseCheckTx);
+  rpc DeliverTx(RequestDeliverTx) returns (ResponseDeliverTx) {
+    option (google.api.http) = {
+      post : "/abci/v1/DeliverTx"
+      body : "*"
+    };
+  }
+  rpc CheckTx(RequestCheckTx) returns (ResponseCheckTx) {
+    option (google.api.http) = {
+      post : "/abci/v1/CheckTx"
+      body : "*"
+    };
+  }
   rpc Query(RequestQuery) returns (ResponseQuery);
-  rpc Commit(RequestCommit) returns (ResponseCommit);
-  rpc InitChain(RequestInitChain) returns (ResponseInitChain);
-  rpc BeginBlock(RequestBeginBlock) returns (ResponseBeginBlock);
-  rpc EndBlock(RequestEndBlock) returns (ResponseEndBlock);
+  rpc Commit(RequestCommit) returns (ResponseCommit) {
+    option (google.api.http) = {
+      post : "/abci/v1/Commit"
+      body : "*"
+    };
+  }
+  rpc InitChain(RequestInitChain) returns (ResponseInitChain) {
+    option (google.api.http) = {
+      get : "/abci/v1/InitChain"
+    };
+  }
+  rpc BeginBlock(RequestBeginBlock) returns (ResponseBeginBlock) {
+    option (google.api.http) = {
+      post : "/abci/v1/BeginBlock"
+      body : "*"
+    };
+  }
+  rpc EndBlock(RequestEndBlock) returns (ResponseEndBlock) {
+    option (google.api.http) = {
+      post : "/abci/v1/EndBlock"
+      body : "*"
+    };
+  }
   rpc ListSnapshots(RequestListSnapshots) returns (ResponseListSnapshots);
   rpc OfferSnapshot(RequestOfferSnapshot) returns (ResponseOfferSnapshot);
   rpc LoadSnapshotChunk(RequestLoadSnapshotChunk) returns (ResponseLoadSnapshotChunk);
